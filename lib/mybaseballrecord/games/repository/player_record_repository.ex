@@ -1,0 +1,2 @@
+defmodule Mybaseballrecord.GamseRepository.PlayerRecordRepository do
+end
