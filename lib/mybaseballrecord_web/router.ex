@@ -7,6 +7,7 @@ defmodule MybaseballrecordWeb.Router do
 
   scope "/api", MybaseballrecordWeb do
     pipe_through :api
+    resources "/game_records", GameRecordController
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

@@ -36,7 +36,16 @@ defmodule Mybaseballrecord.Games do
       ** (Ecto.NoResultsError)
 
   """
-  def get_game_record!(id), do: Repo.get!(GameRecord, id)
+  def get_game_record(id) do
+    try do
+      case Repo.get(GameRecord, id) do
+        nil -> {:error, {:not_found, "GameRecord with ID #{id} not found"}}
+        game_record -> {:ok, game_record}
+      end
+    rescue
+      e -> {:error, {:not_found, "Query failed due to invalid input: #{inspect(e)}"}}
+    end
+  end
 
   @doc """
   Creates a game_record.
