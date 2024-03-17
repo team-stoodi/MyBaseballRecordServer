@@ -11,6 +11,10 @@ config :mybaseballrecord,
   ecto_repos: [Mybaseballrecord.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
+config :mybaseballrecord,
+  ecto_repos: [Mybaseballrecord.Repo],
+  migration_source: "lib/repo/migrations/"
+
 # Configures the endpoint
 config :mybaseballrecord, MybaseballrecordWeb.Endpoint,
   url: [host: "localhost"],
