@@ -31,9 +31,9 @@ config :mybaseballrecord, MybaseballrecordWeb.Endpoint,
 # at the `config/runtime.exs`.
 config :mybaseballrecord, Mybaseballrecord.Mailer, adapter: Swoosh.Adapters.Local
 
-config :mybaseballrecord, YourApp.Guardian,
+config :mybaseballrecord, Mybaseballrecord.Guardian,
   issuer: "mybaseballrecord",
-  secret_key: "secret"
+  secret_key: "zcpb/NUxwhHLPnJzzPX+dgO17sCJCl1sEtNyOQrUGJf/nr37etkBVfTF6RNlf1DF"
 
 # Configure esbuild (the version is required)
 config :esbuild,

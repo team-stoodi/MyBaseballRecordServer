@@ -1,4 +1,6 @@
 defmodule Mybaseballrecord.Accounts.User do
+  @derive {Jason.Encoder,
+           only: [:id, :name, :role, :email, :birthday, :intro, :inserted_at, :updated_at]}
   use Ecto.Schema
   import Ecto.Changeset
 

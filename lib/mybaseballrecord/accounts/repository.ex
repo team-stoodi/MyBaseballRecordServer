@@ -13,7 +13,11 @@ defmodule Mybaseballrecord.Accounts.Repository do
   #   |> Repo.one()
   # end
 
-  def get_user_by(email) do
+  def get_user_by(%{email: email}) do
     Repo.get_by(User, email: email)
+  end
+
+  def get_user_by(%{id: id}) do
+    Repo.get(User, id)
   end
 end

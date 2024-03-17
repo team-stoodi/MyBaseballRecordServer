@@ -5,9 +5,22 @@ defmodule MybaseballrecordWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :auth do
+    plug MybaseballrecordWeb.AuthPipeline
+  end
+
   scope "/api", MybaseballrecordWeb do
     pipe_through :api
-    resources "/game_records", GameRecordController
+
+    post "/login", AccountsController, :login
+    post "/register", AccountsController, :register
+
+    scope "/" do
+      pipe_through :auth
+
+      get "/me", AccountsController, :me
+      resources "/game_records", GameRecordController
+    end
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development
