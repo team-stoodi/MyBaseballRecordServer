@@ -123,4 +123,31 @@ defmodule Mybaseballrecord.AccountsServiceTest do
       assert :unauthorized
     end
   end
+
+  describe "get_user/1" do
+    defp get_user(attrs) do
+      Service.get_user(attrs)
+    end
+
+    setup do
+      {:ok, user} = register_user(%{email: "test@example.com", password: "password123"})
+      {:ok, user: user}
+    end
+
+    test "with valid id", %{user: user} do
+      {:ok, user} = get_user(%{id: user.id})
+      assert user.id
+      assert user.email == "test@example.com"
+    end
+
+    test "with invalid id format", %{user: _} do
+      {:error, :invalid_attrs} = get_user(%{id: 1})
+      assert :invalid_attrs
+    end
+
+    test "with not found id", %{user: _} do
+      {:error, :not_found} = get_user(%{id: "32bcaafd-b6f7-4843-9d0d-8d85da4e2571"})
+      assert :not_found
+    end
+  end
 end
