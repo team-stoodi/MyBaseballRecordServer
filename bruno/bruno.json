@@ -1,0 +1,9 @@
+{
+  "version": "1",
+  "name": "mybaseballrecord",
+  "type": "collection",
+  "ignore": [
+    "node_modules",
+    ".git"
+  ]
+}
