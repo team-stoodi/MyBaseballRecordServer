@@ -69,18 +69,14 @@ defmodule Mybaseballrecord.AccountsServiceTest do
     end
   end
 
-  describe "authenticate/2" do
+  describe "authenticate/1" do
+    defp authenticate(attrs) do
+      Service.authenticate(attrs)
+    end
+
     setup do
       attrs = %{email: "test@example.com", password: "password123"}
       {:ok, attrs: attrs}
-    end
-
-    defp register_user(attrs) do
-      Service.register_user(attrs)
-    end
-
-    defp authenticate(attrs) do
-      Service.authenticate(attrs)
     end
 
     test "with valid email and password", %{attrs: attrs} do
@@ -99,6 +95,31 @@ defmodule Mybaseballrecord.AccountsServiceTest do
       {:ok, user} = register_user(attrs)
 
       {:error, :unauthorized} = authenticate(%{email: user.email, password: "password1234"})
+      assert :unauthorized
+    end
+  end
+
+  describe "authenticate_and_return_token/1" do
+    defp generate_jwt_for_authenticated_user(attrs) do
+      Service.generate_jwt_for_authenticated_user(attrs)
+    end
+
+    setup do
+      attrs = %{email: "test@example.com", password: "password123"}
+      {:ok, attrs: attrs}
+    end
+
+    test "with valid email and password", %{attrs: attrs} do
+      {:ok, _} = register_user(attrs)
+
+      {:ok, token} =
+        generate_jwt_for_authenticated_user(attrs)
+
+      assert token
+    end
+
+    test "with invalid email and password" do
+      {:error, :unauthorized} = authenticate(%{email: "test", password: "password1234"})
       assert :unauthorized
     end
   end
