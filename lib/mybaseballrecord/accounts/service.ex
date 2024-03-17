@@ -40,4 +40,17 @@ defmodule Mybaseballrecord.Accounts.Service do
   def generate_jwt_for_authenticated_user(_attrs) do
     {:error, :invalid_attrs}
   end
+
+  def get_user(%{id: id}) when is_binary(id) do
+    with user <- Repository.get_user_by(%{id: id}),
+         true <- is_map(user) do
+      {:ok, user}
+    else
+      _ -> {:error, :not_found}
+    end
+  end
+
+  def get_user(_attrs) do
+    {:error, :invalid_attrs}
+  end
 end

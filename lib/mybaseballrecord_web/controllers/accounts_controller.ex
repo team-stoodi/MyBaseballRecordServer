@@ -23,11 +23,15 @@ defmodule MybaseballrecordWeb.AccountsController do
   end
 
   def me(conn, _params) do
-    user = Guardian.Plug.current_resource(conn)
+    current_user = conn.assigns.current_user
 
-    conn
-    |> put_status(:ok)
-    |> json(%{user: user})
+    with {:ok, user} <- Service.get_user(%{id: current_user.id}) do
+      conn
+      |> put_status(:ok)
+      |> json(%{user: user})
+    else
+      {:error, reason} -> send_error_response(conn, reason, :me)
+    end
   end
 
   defp generate_token(email, password) do
@@ -44,12 +48,13 @@ defmodule MybaseballrecordWeb.AccountsController do
   defp send_error_response(conn, reason, action) do
     Logger.error("Error: #{inspect(reason)}")
 
-    error_message =
+    {status, error_message} =
       case action do
-        :register -> "Invalid email or password"
-        :login -> "Authentication failed"
+        :register -> {:unprocessible_entity, "Invalid email or password"}
+        :login -> {:unauthorized, "Authentication failed"}
+        :me -> {:not_found, "User not found"}
       end
 
-    conn |> put_status(:unauthorized) |> json(%{error: error_message})
+    conn |> put_status(status) |> json(%{error: error_message})
   end
 end

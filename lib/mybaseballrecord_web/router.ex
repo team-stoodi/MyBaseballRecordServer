@@ -7,6 +7,7 @@ defmodule MybaseballrecordWeb.Router do
 
   pipeline :auth do
     plug MybaseballrecordWeb.AuthPipeline
+    plug MybaseballrecordWeb.Plugs.AssignCurrentUser
   end
 
   scope "/api", MybaseballrecordWeb do
