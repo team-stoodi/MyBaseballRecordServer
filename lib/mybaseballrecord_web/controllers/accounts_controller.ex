@@ -23,13 +23,13 @@ defmodule MybaseballrecordWeb.AccountsController do
   end
 
   def me(conn, _params) do
-    current_user = conn.assigns.current_user
-
-    with {:ok, user} <- Service.get_user(%{id: current_user.id}) do
+    with current_user when not is_nil(current_user) <- conn.assigns.current_user,
+         {:ok, user} <- Service.get_user(%{id: current_user.id}) do
       conn
       |> put_status(:ok)
       |> json(%{user: user})
     else
+      nil -> send_error_response(conn, :no_current_user, :me)
       {:error, reason} -> send_error_response(conn, reason, :me)
     end
   end
@@ -49,10 +49,11 @@ defmodule MybaseballrecordWeb.AccountsController do
     Logger.error("Error: #{inspect(reason)}")
 
     {status, error_message} =
-      case action do
-        :register -> {:unprocessable_entity, "Invalid email or password"}
-        :login -> {:unauthorized, "Authentication failed"}
-        :me -> {:not_found, "User not found"}
+      case {action, reason} do
+        {:register, _} -> {:unprocessable_entity, "Invalid email or password"}
+        {:login, _} -> {:unauthorized, "Authentication failed"}
+        {:me, :no_current_user} -> {:unauthorized, "No current user found"}
+        {:me, _} -> {:not_found, "User not found"}
       end
 
     conn |> put_status(status) |> json(%{error: error_message})
