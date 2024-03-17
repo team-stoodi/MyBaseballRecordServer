@@ -50,7 +50,7 @@ defmodule MybaseballrecordWeb.AccountsController do
 
     {status, error_message} =
       case action do
-        :register -> {:unprocessible_entity, "Invalid email or password"}
+        :register -> {:unprocessable_entity, "Invalid email or password"}
         :login -> {:unauthorized, "Authentication failed"}
         :me -> {:not_found, "User not found"}
       end
