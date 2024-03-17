@@ -11,10 +11,6 @@ config :mybaseballrecord,
   ecto_repos: [Mybaseballrecord.Repo],
   generators: [timestamp_type: :utc_datetime, binary_id: true]
 
-config :mybaseballrecord,
-  ecto_repos: [Mybaseballrecord.Repo],
-  migration_source: "lib/repo/migrations/"
-
 # Configures the endpoint
 config :mybaseballrecord, MybaseballrecordWeb.Endpoint,
   url: [host: "localhost"],
@@ -34,6 +30,10 @@ config :mybaseballrecord, MybaseballrecordWeb.Endpoint,
 # For production it's recommended to configure a different adapter
 # at the `config/runtime.exs`.
 config :mybaseballrecord, Mybaseballrecord.Mailer, adapter: Swoosh.Adapters.Local
+
+config :mybaseballrecord, YourApp.Guardian,
+  issuer: "mybaseballrecord",
+  secret_key: "secret"
 
 # Configure esbuild (the version is required)
 config :esbuild,
